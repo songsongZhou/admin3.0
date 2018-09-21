@@ -27,7 +27,7 @@
 
                     <el-form-item label="商品图片" prop="goodsImage">
                         <el-upload
-                                :action="api.Hallowmas+'uploadImage'"
+                                :action="api.Hallowmas+'/uploadImage'"
                                 accept="image/*"
                                 list-type="picture-card"
                                 :on-preview="handlePictureCardPreview"
@@ -89,26 +89,26 @@
             </el-card>
 
             <!--添加商品sku的弹窗-->
-            <el-dialog title="添加商品规格" :visible.sync="dialogFormVisible" center>
+            <el-dialog title="添加商品规格" :visible.sync="dialogFormVisible" center width="30%">
                 <el-form ref="skuForm" :model="skuForm" :rules="skuFormRules" label-width="80px">
                     <el-form-item label="名称" prop="skuName">
-                        <el-input v-model="skuForm.skuName" clearable style="width: 50%"></el-input>
+                        <el-input v-model="skuForm.skuName" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="价格" prop="skuPrice">
-                        <el-input v-model="skuForm.skuPrice" clearable type="number" style="width: 50%"></el-input>
+                        <el-input v-model="skuForm.skuPrice" clearable type="number"></el-input>
                     </el-form-item>
                     <el-form-item label="划线价格">
-                        <el-input v-model="skuForm.skuLinePrice" clearable type="number" style="width: 50%"></el-input>
+                        <el-input v-model="skuForm.skuLinePrice" clearable type="number"></el-input>
                     </el-form-item>
                     <el-form-item label="库存" prop="stock">
-                        <el-input v-model="skuForm.stock" clearable type="number" style="width: 50%"></el-input>
+                        <el-input v-model="skuForm.stock" clearable type="number"></el-input>
                     </el-form-item>
                     <el-form-item label="编号">
-                        <el-input v-model="skuForm.skuCode" clearable type="number" style="width: 50%"></el-input>
+                        <el-input v-model="skuForm.skuCode" clearable type="number"></el-input>
                     </el-form-item>
                     <el-form-item label="图片" prop="skuImage">
                         <el-upload
-                                :action="api.Hallowmas+'uploadImage'"
+                                :action="api.Hallowmas+'/uploadImage'"
                                 accept="image/*"
                                 list-type="picture-card"
                                 :on-preview="handleSkuPictureCardPreview"
@@ -117,7 +117,7 @@
                             <i class="el-icon-plus"></i>
                         </el-upload>
 
-                        <el-dialog :visible.sync="dialogSkuVisible">
+                        <el-dialog :visible.sync="dialogSkuVisible" append-to-body>
                             <img width="100%" :src="skuForm.skuImage" alt="">
                         </el-dialog>
                     </el-form-item>
@@ -212,7 +212,13 @@
 
                         console.log('传参', this.goodsVo)
                         console.log('submit!', JSON.stringify(this.goodsVo));
-
+                        if(this.skuTableData.length<=0){
+                            this.$message({
+                                message: '请至少添加一个规格',
+                                type: 'error'
+                            });
+                            return false
+                        }
                         addOrUpdateGoods(this.goodsVo).then(res => {
                             console.log(res)
                         })
@@ -244,7 +250,7 @@
                     }
                 }
             },
-            handleSuccess: function (response, file, fileList) {
+            handleSuccess: function (response) {
                 this.goodsForm.goodsImage = response.data
                 console.log(response)
             },
@@ -258,12 +264,12 @@
 
             // SKU 部分
             handleEdit(index, row) {
-
+                console.log(row)
             },
             handleDelete(index, row) {
-
+                console.log(row)
             },
-            handleSkuSuccess: function (response, file, fileList) {
+            handleSkuSuccess: function (response) {
                 this.skuForm.skuImage = response.data
                 console.log(response)
             },

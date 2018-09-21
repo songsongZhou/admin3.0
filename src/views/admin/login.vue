@@ -22,8 +22,8 @@
 
 <script>
 
-    import {login} from "../axios/api";
-
+    import {login} from "../../axios/api";
+    import store from "../../store";
     export default {
         data() {
             return {
@@ -59,7 +59,7 @@
                                 that.$message.error(res.data.msg);
                             }
                         }).catch(function (req) {
-
+                            console.log(req)
                         })
                         that.loginLoading = false
                     }
@@ -74,8 +74,7 @@
 
 <style scoped>
     .container {
-        background-image: linear-gradient(to left, #BDBBBE 0%, #9D9EA3 100%), radial-gradient(88% 271%, rgba(255, 255, 255, 0.25) 0%, rgba(254, 254, 254, 0.25) 1%, rgba(0, 0, 0, 0.25) 100%), radial-gradient(50% 100%, rgba(255, 255, 255, 0.30) 0%, rgba(0, 0, 0, 0.30) 100%);
-        background-blend-mode: normal, lighten, soft-light;
+        background-image: linear-gradient(to top, #4481eb 0%, #04befe 100%);
         height: 100%;
         width: 100%;
         position: absolute;

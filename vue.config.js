@@ -1,4 +1,5 @@
 module.exports={
+    baseUrl: './',
     devServer:{
         open:false,
         port:'8082',

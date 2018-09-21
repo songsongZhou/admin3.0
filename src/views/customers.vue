@@ -1,5 +1,14 @@
 <template>
   <div>
+    <!--查询-->
+    <el-form :inline="true" class="demo-form-inline">
+      <el-form-item label="用户昵称">
+        <el-input placeholder="支持模糊查询"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary">查询</el-button>
+      </el-form-item>
+    </el-form>
     <el-table
       :data="tableData"
       style="width: 100%">

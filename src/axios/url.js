@@ -1,5 +1,7 @@
 export default {
-  Hallowmas:'/api',
+  Hallowmas:'http://www.shuobakeji.com',
+  // Hallowmas:'http://192.168.2.55',
+  // Hallowmas:'/api',
   //接口代理配置
 }
 
