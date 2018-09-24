@@ -164,3 +164,15 @@ export function getBanner() {
     })
 }
 
+export function delImages(images) {
+    return fetch({
+        url: api.Hallowmas + '/delImages',
+        method: 'POST',
+        params:{
+            images:images
+        }
+    })
+}
+
+
+

@@ -138,7 +138,7 @@
 </template>
 
 <script>
-    import {getCategorys, addOrUpdateGoods} from "../../axios/api";
+    import {getCategorys, addOrUpdateGoods,delImages} from "../../axios/api";
     import api from '@/axios/url'
 
     export default {
@@ -169,12 +169,12 @@
                     ]
                 },
                 skuForm: {//sku对象
-                    skuImage: '',
+                    skuImage: "",
                     skuName: "",
-                    skuPrice: 0,
-                    skuLinePrice: 0,
-                    skuCode: '',
-                    stock: 0
+                    skuPrice: '',
+                    skuLinePrice: '',
+                    skuCode: "",
+                    stock: ''
                 },
                 skuTableData: [],
                 skuFormRules: {
@@ -212,6 +212,7 @@
 
                         console.log('传参', this.goodsVo)
                         console.log('submit!', JSON.stringify(this.goodsVo));
+                        return false;
                         if(this.skuTableData.length<=0){
                             this.$message({
                                 message: '请至少添加一个规格',
@@ -220,7 +221,17 @@
                             return false
                         }
                         addOrUpdateGoods(this.goodsVo).then(res => {
-                            console.log(res)
+                            if(res.data.code==1){
+                                this.$message({
+                                    message: '商品创建成功！',
+                                    type: 'success'
+                                });
+                            }else{
+                                this.$message({
+                                    message: res.data.msg,
+                                    type: 'error'
+                                });
+                            }
                         })
                     }
                 })
@@ -255,7 +266,13 @@
                 console.log(response)
             },
             handleRemove(file, fileList) {
-                console.log(file, fileList);
+                console.log("del"+file, fileList);
+                var imgUrl=file.split("/");
+                console.log("图片地址"+imgUrl[imgUrl.length])
+                delImages("goods-image/"+imgUrl[imgUrl.length]).then(res=>{
+                    console.log(res)
+                })
+                console.log("del"+file, fileList);
             },
             handlePictureCardPreview(file) {
                 this.goodsForm.goodsImage = file.url;
@@ -274,7 +291,12 @@
                 console.log(response)
             },
             handleSkuRemove(file, fileList) {
-                console.log(file, fileList);
+                var imgUrl=file.split(",");
+                console.log("图片地址"+imgUrl[imgUrl.length])
+                delImages(imgUrl[imgUrl.length]).then(res=>{
+                    console.log(res)
+                })
+                console.log("del"+file, fileList);
             },
             handleSkuPictureCardPreview(file) {
                 this.skuForm.skuImage = file.url;

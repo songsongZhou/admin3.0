@@ -6,10 +6,10 @@
                 <el-input placeholder="支持模糊查询"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" >查询</el-button>
+                <el-button type="primary">查询</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" >添加</el-button>
+                <el-button type="primary" @click="dialogVisible=true">添加</el-button>
             </el-form-item>
         </el-form>
         <el-table :data="bannerData">
@@ -29,6 +29,40 @@
                 </template>
             </el-table-column>
         </el-table>
+
+        <el-dialog
+                title="添加banner"
+                :visible.sync="dialogVisible"
+                width="30%">
+
+            <el-form :model="form">
+                <el-form-item label="活动名称" :label-width="formLabelWidth">
+                    <el-input v-model="form.title" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="活动区域" :label-width="formLabelWidth">
+                    <el-input v-model="form.path" autocomplete="off"></el-input>
+                </el-form-item>
+
+                <el-form-item label="banner" :label-width="formLabelWidth">
+                    <el-upload
+                            :action="api.Hallowmas+'/uploadImage'"
+                            accept="image/*"
+                            list-type="picture-card"
+                            :on-preview="handleSkuPictureCardPreview">
+                        <i class="el-icon-plus"></i>
+                    </el-upload>
+
+                    <el-dialog :visible.sync="dialogBannerVisible" append-to-body>
+                        <img width="100%" :src="skuForm.skuImage" alt="">
+                    </el-dialog>
+                </el-form-item>
+            </el-form>
+
+            <span slot="footer" class="dialog-footer">
+             <el-button @click="dialogVisible = false">取 消</el-button>
+             <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -36,19 +70,22 @@
     import {getBanner} from "../../axios/api";
 
     export default {
-        data(){
-            return{
-                bannerData:[]
+        data() {
+            return {
+                dialogVisible:false,
+                form:{},
+                dialogBannerVisible:false,
+                bannerData: []
             }
         },
-        created(){
+        created() {
             this.getBannerData()
         },
-        methods:{
-            getBannerData(){
-                getBanner().then(res=>{
+        methods: {
+            getBannerData() {
+                getBanner().then(res => {
                     console.log(res)
-                    this.bannerData=res.data.data
+                    this.bannerData = res.data.data
                 })
             }
         }
