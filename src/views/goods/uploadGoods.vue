@@ -212,7 +212,7 @@
 
                         console.log('传参', this.goodsVo)
                         console.log('submit!', JSON.stringify(this.goodsVo));
-                        return false;
+
                         if(this.skuTableData.length<=0){
                             this.$message({
                                 message: '请至少添加一个规格',
@@ -267,7 +267,7 @@
             },
             handleRemove(file, fileList) {
                 console.log("del"+file, fileList);
-                var imgUrl=file.split("/");
+                var imgUrl=file.url.split("/");
                 console.log("图片地址"+imgUrl[imgUrl.length])
                 delImages("goods-image/"+imgUrl[imgUrl.length]).then(res=>{
                     console.log(res)

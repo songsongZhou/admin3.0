@@ -164,6 +164,19 @@ export function getBanner() {
     })
 }
 
+export function addBanner(title,path,image) {
+    return fetch({
+        url: api.Hallowmas + '/addBanner',
+        method: 'POST',
+        params:{
+            title:title,
+            path:path,
+            image:image
+        }
+    })
+}
+
+
 export function delImages(images) {
     return fetch({
         url: api.Hallowmas + '/delImages',

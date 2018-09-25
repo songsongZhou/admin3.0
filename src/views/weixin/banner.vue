@@ -35,46 +35,57 @@
                 :visible.sync="dialogVisible"
                 width="30%">
 
-            <el-form :model="form">
-                <el-form-item label="活动名称" :label-width="formLabelWidth">
-                    <el-input v-model="form.title" autocomplete="off"></el-input>
+            <el-form :model="form" label-width="80px" :rules="rules" ref="form">
+                <el-form-item label="标题">
+                    <el-input v-model="form.title"></el-input>
                 </el-form-item>
-                <el-form-item label="活动区域" :label-width="formLabelWidth">
-                    <el-input v-model="form.path" autocomplete="off"></el-input>
+                <el-form-item label="连接" prop="path">
+                    <el-input v-model="form.path"></el-input>
                 </el-form-item>
 
-                <el-form-item label="banner" :label-width="formLabelWidth">
+                <el-form-item label="图片" label-width="80px" prop="image">
                     <el-upload
                             :action="api.Hallowmas+'/uploadImage'"
                             accept="image/*"
                             list-type="picture-card"
-                            :on-preview="handleSkuPictureCardPreview">
+                            :on-success="handleBannerSuccess"
+                            :on-preview="handleBannerPreview">
                         <i class="el-icon-plus"></i>
                     </el-upload>
 
                     <el-dialog :visible.sync="dialogBannerVisible" append-to-body>
-                        <img width="100%" :src="skuForm.skuImage" alt="">
+                        <img width="100%" :src="form.image" alt="">
                     </el-dialog>
                 </el-form-item>
             </el-form>
 
             <span slot="footer" class="dialog-footer">
              <el-button @click="dialogVisible = false">取 消</el-button>
-             <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+             <el-button type="primary" @click="addBanner('form')">确 定</el-button>
             </span>
         </el-dialog>
     </div>
 </template>
 
 <script>
-    import {getBanner} from "../../axios/api";
+    import {getBanner,addBanner} from "../../axios/api";
+    import api from '@/axios/url'
 
     export default {
         data() {
             return {
+                api,
                 dialogVisible:false,
-                form:{},
+                form:{
+                    title:"",
+                    image:"",
+                    path:""
+                },
                 dialogBannerVisible:false,
+                rules:{
+                    path:[{required: true, message: '请输入连接', trigger: 'blur'}],
+                    image:[{required: true, message: '请上传一张720x300的banner图片', trigger: 'blur'}]
+                },
                 bannerData: []
             }
         },
@@ -87,6 +98,35 @@
                     console.log(res)
                     this.bannerData = res.data.data
                 })
+            },
+            addBanner(form){
+                var that=this
+                this.$refs[form].validate((valid) => {
+                    if(valid){
+                        addBanner(that.form.title,that.form.path,that.form.image).then(res=>{
+                            if(res.data.code==1){
+                                that.$message({
+                                    message: '新增成功！',
+                                    type: 'success'
+                                });
+                                this.dialogVisible=false
+                            }else{
+                                that.$message({
+                                    message: res.data.msg,
+                                    type: 'error'
+                                });
+                            }
+                        })
+
+                    }
+                })
+            },
+            handleBannerSuccess: function (response) {
+                this.form.image = response.data
+            },
+            handleBannerPreview(file){
+                this.form.image = file.url;
+                this.dialogBannerVisible = true;
             }
         }
     }
